@@ -1,14 +1,37 @@
 "use strict";
+let vies = 0;
+let nbPieges = 0;
+let nbObstacles = 0;
+//-------CHOIX DIFFICULTE
+let difficulte = prompt(`Choisissez votre difficulté : Facile, Normal, Hardcore`).toLowerCase()
+
+if (difficulte === "facile") {
+    nbPieges = Math.floor(Math.random()* 2) + 2;
+    nbObstacles = Math.floor(Math.random()* 10) + 30;
+    vies = 5;
+    console.error(`Vous avez choisi la dificulté "Facile"`)
+} else if (difficulte === "normal") {
+    nbPieges = Math.floor(Math.random()* 8) + 10;
+    nbObstacles = Math.floor(Math.random()* 15) + 35;
+    vies = 3;
+    console.error(`Vous avez choisi la difficulté "Normal"`);
+    
+} else if (difficulte === "hardcore") {
+    nbPieges = Math.floor(Math.random()* 15) + 20;
+    nbObstacles = Math.floor(Math.random()* 20) + 40;
+    vies = 1;
+    console.error(`Vous avez choisi la difficulté "Hardcore"`);
+} else {
+    alert("Veuillez rentrer une difficulté valide !")
+    location.reload();
+}
+
 //-------POSITIONS DE THOR ET ECLAIR
 let lightX = 0;
 let lightY = 0;
 let initialTX = 0;
 let initialTY = 0;
-let nbPieges = Math.floor(Math.random()* 3) + 3;
-let nbObstacles = Math.floor(Math.random()* 3) + 3;
-
 let endGame = false;
-let vies = 3;
 
 function getRandomX(max) {
   return Math.floor(Math.random() * max);
@@ -34,14 +57,14 @@ function thanosPosition(nombre) {
         thanosPositionXY.push([thanosX, thanosY])
     }
     if ((thanosX > 40) || (thanosX < 0) || (thanosY > 18) || (thanosY < 0)) {
-        console.log("thanos est sortie du plateau");
+        console.warn("thanos est sortie du plateau");
     }
 }
 
 let thanosX = lightX -1;
 let thanosY = lightY -1;
 if ((thanosX > 40) || (thanosX < 0) || (thanosY > 18) || (thanosY < 0)) {
-    console.warn("thanos est sortie du plateau");
+    console.warn("thanos à spawn en dehors du plateau");
     thanosX = lightX +1;
     thanosY = lightY +1;
 }
@@ -59,7 +82,7 @@ function allPieges(nombre) {
 }
 
 allPieges(nbPieges);
-console.log("Les pièges", pieges);
+// console.log("Les pièges", pieges);
 
 //----OBSTACLES
 
@@ -69,12 +92,12 @@ function allObstacles(nombre) {
     for (let i = 0 ; i < nombre ; i++) {
         let obstaclesX = getRandomX(40);
         let obstaclesY = getRandomY(18);
-        obstacles.push([obstaclesX, obstaclesY])
+        obstacles.push([obstaclesX, obstaclesY])      
     }
 }
 
 allObstacles(nbObstacles)
-console.log("Les obstacles", obstacles);
+// console.log("Les obstacles", obstacles);
 
 //-------JEUX
 
@@ -83,28 +106,28 @@ console.log(`la position de l'eclair est ${lightX} sur l'axe X et ${lightY} sur 
 
 while (!endGame) {
 
-    console.log(`la position de thor est ${initialTX} sur l'axe X et ${initialTY} sur l'axe Y`);
     console.log(`la position de Thanos est ${thanosX} sur l'axe X et ${thanosY} sur l'axe Y`);
-    let direction = prompt("indiquer une direction : N, NE, E, SE, S, SW, W, NW");
+    console.log(`la position de Thor est ${initialTX} sur l'axe X et ${initialTY} sur l'axe Y`);
+    let direction = prompt("indiquer une direction : N, NE, E, SE, S, SW, W, NW").toLowerCase();
 
-    if (direction === "N") {
+    if (direction === "n") {
         initialTY--
-    } else if (direction === "NE") {
+    } else if (direction === "ne") {
         initialTY--
         initialTX++
-    } else if (direction === "E") {
+    } else if (direction === "e") {
         initialTX++
-    } else if (direction === "SE") {
+    } else if (direction === "se") {
         initialTY++
         initialTX++
-    } else if (direction === "S") {
+    } else if (direction === "s") {
         initialTY++
-    } else if (direction === "SW") {
+    } else if (direction === "sw") {
         initialTY++
         initialTX--
-    } else if (direction === "W") {
+    } else if (direction === "w") {
         initialTX--
-    } else if (direction === "NW") {
+    } else if (direction === "nw") {
         initialTY--
         initialTX--
     }
@@ -129,24 +152,24 @@ while (!endGame) {
     for (let i = 0 ; i < obstacles.length ; i++) {
         if (initialTX === obstacles[i][0] && initialTY === obstacles[i][1]) {
             console.warn(`Vous ne pouvez pas passer il y à un obstacle`)
-            if (direction === "N") {
+            if (direction === "n") {
                 initialTY++
-            } else if (direction === "NE") {
+            } else if (direction === "ne") {
                 initialTY++
                 initialTX--
-            } else if (direction === "E") {
+            } else if (direction === "e") {
                 initialTX--
-            } else if (direction === "SE") {
+            } else if (direction === "se") {
                 initialTY--
                 initialTX--
-            } else if (direction === "S") {
+            } else if (direction === "s") {
                 initialTY--
-            } else if (direction === "SW") {
+            } else if (direction === "sw") {
                 initialTY--
                 initialTX++
-            } else if (direction === "W") {
+            } else if (direction === "w") {
                 initialTX++
-            } else if (direction === "NW") {
+            } else if (direction === "nw") {
                 initialTY++
                 initialTX++
             }
@@ -154,7 +177,6 @@ while (!endGame) {
     }
 
     thanosPosition(1);
-    console.log(thanosPositionXY);
 
     if ((initialTX > 40) || (initialTX < 0) || (initialTY > 18) || (initialTY < 0)) {
         endGame = true;
@@ -168,3 +190,4 @@ while (!endGame) {
         location.reload();
     }
 }
+
